@@ -4,7 +4,7 @@ import flet as ft
 from flet.matplotlib_chart import MatplotlibChart
 import matplotlib.pyplot as plt
 from collections import deque
-
+from proxydb import SensorDataInserterSQLite
 # Configurar el puerto serial
 arduino_port = 'COM6'  # Cambia esto según tu puerto
 baud_rate = 9600  # Velocidad de transmisión (baud rate)
@@ -15,6 +15,7 @@ ser = serial.Serial(arduino_port, baud_rate, timeout=timeout)
 data_buffer = deque(maxlen=100)
 
 def main(page: ft.Page):
+    inserter = SensorDataInserterSQLite(db_file="sensores.db")
     # Configuración inicial de la ventana
     page.title = "Gráfica de Datos en Tiempo Real"
     page.window_width = 800
@@ -50,6 +51,10 @@ def main(page: ft.Page):
                     if data.isdigit():  # Verificar que los datos sean números
                         data_buffer.append(int(data))  # Agregar los datos al buffer
                         print(f"Datos recibidos: {data}")  # Imprimir datos recibidos
+                        mq135_valor = 300  # Ejemplo de valor del sensor MQ-135
+                        mq4_valor = 200    # Ejemplo de valor del sensor MQ-4
+                        fecha_valor = time.ctime()
+                        inserter.insertar_datos(fecha_valor, mq135_valor, mq4_valor)
                         update_chart()  # Actualizar la gráfica en tiempo real
         except serial.SerialException as e:
             print(f"Error de conexión: {e}")
