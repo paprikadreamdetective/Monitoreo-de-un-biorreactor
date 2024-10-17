@@ -17,8 +17,8 @@ class SensorDataReader:
                 print(f"Datos recibidos: {data}")
                 valores = data.split(',')
                 if len(valores) == 2:
-                    mq135_valor = int(valores[0])
-                    mq3_valor = int(valores[1])
+                    mq135_valor = float(valores[0])
+                    mq3_valor = float(valores[1])
                     fecha_valor = time.ctime()
                     self.graph.add_data(mq135_valor, mq3_valor)
                     self.inserter.insertar_datos(fecha_valor, mq135_valor, mq3_valor)
