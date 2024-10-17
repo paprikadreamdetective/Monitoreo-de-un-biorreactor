@@ -1,8 +1,8 @@
-from proxydb import SensorDataInserterSQLite
-from SerialConnection import SerialConnection
-from ExcelGenerator import ExcelGenerator
-from Chart import Chart
-from SensorDataReader import SensorDataReader
+from db.proxydb import SensorDataInserterSQLite
+from model.SerialConnection import SerialConnection
+from model.ExcelGenerator import ExcelGenerator
+from model.Chart import Chart
+from model.SensorDataReader import SensorDataReader
 
 
 import time
