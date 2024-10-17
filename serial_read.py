@@ -8,7 +8,7 @@ from SensorDataReader import SensorDataReader
 import time
 import flet as ft
 from flet.matplotlib_chart import MatplotlibChart
-
+import sqlite3
 
 # --- Módulo principal de la interfaz gráfica ---
 def main(page: ft.Page):
@@ -41,6 +41,78 @@ def main(page: ft.Page):
     
     def stop_reading_serial(e):
         serial_connection.disconnect(ser)
+    
+    # Función para mostrar la ventana con los datos de la base de datos en formato de tabla
+    def mostrar_datos(e):
+        # Conectar a la base de datos SQLite
+        conn = sqlite3.connect('db/sensores.db')
+        cursor = conn.cursor()
+
+        # Ejecutar consulta
+        cursor.execute("SELECT * FROM lecturas_sensores")  # Ajustar la consulta según la estructura de tu tabla
+        datos = cursor.fetchall()
+
+        # Crear encabezados de la tabla
+        encabezados = [
+            ft.DataColumn(ft.Text("ID")),
+            ft.DataColumn(ft.Text("Fecha")),
+            ft.DataColumn(ft.Text("Sensor MQ-135")),
+            ft.DataColumn(ft.Text("Sensor MQ-3")),
+        ]
+
+        # Crear filas con los datos de la consulta
+        filas = [
+            ft.DataRow(
+                cells=[
+                    ft.DataCell(ft.Text(str(fila[0]))),  # ID
+                    ft.DataCell(ft.Text(fila[1])),       # Fecha
+                    ft.DataCell(ft.Text(str(fila[2]))),  # MQ-135
+                    ft.DataCell(ft.Text(str(fila[3]))),  # MQ-3
+                ]
+            )
+            for fila in datos
+        ]
+
+        # Crear la tabla con los encabezados y filas
+        tabla = ft.DataTable(
+            columns=encabezados,
+            rows=filas,
+            column_spacing=10,
+            heading_row_height=30,
+            
+        )
+
+        # Crear un contenedor con tamaño fijo y scrollbar
+        container = ft.Container(
+            width=600,
+            height=400,
+            content=ft.ListView(
+                controls=[tabla],   # Incluir la tabla en el ListView
+                expand=True,
+                auto_scroll=False,  # Desactivar autoscroll para usar scrollbar manual
+            )
+        )
+
+        # Crear un diálogo para mostrar la tabla
+        dialogo = ft.AlertDialog(
+            title=ft.Text("Datos de Sensores"),
+            content=container,
+            actions=[ft.TextButton("Cerrar", on_click=lambda e: cerrar_dialogo())],
+            actions_alignment=ft.MainAxisAlignment.END,
+        )
+
+        # Función para cerrar el diálogo
+        def cerrar_dialogo():
+            dialogo.open = False
+            page.update()
+
+        # Mostrar el diálogo
+        page.dialog = dialogo
+        dialogo.open = True
+        page.update()
+    
+    # Botón para mostrar la ventana con los datos
+    page.add(ft.ElevatedButton("Mostrar Datos de Sensores", on_click=mostrar_datos))
 
     # Botón para iniciar la lectura serial
     page.add(ft.ElevatedButton("Iniciar Lectura Serial", on_click=start_reading_serial))

@@ -23,5 +23,5 @@ void loop() {
   Serial.println(j);
   i++;
   j++;*/
-  delay(250);
+  delay(10000);
 }

@@ -46,19 +46,3 @@ class SensorDataInserterSQLite:
         self.cursor.close()
         self.connection.close()
         print("Conexión a la base de datos cerrada")
-
-'''
-# Ejemplo de uso de la clase
-if __name__ == "__main__":
-    # Crear un objeto de la clase e insertar un dato de prueba
-    inserter = SensorDataInserterSQLite(db_file="sensores.db")
-    
-    # Simulación de datos de sensores
-    mq135_valor = 300  # Ejemplo de valor del sensor MQ-135
-    mq4_valor = 200    # Ejemplo de valor del sensor MQ-4
-    
-    inserter.insertar_datos(mq135_valor, mq4_valor)
-    
-    # Cerrar la conexión
-    inserter.cerrar_conexion()
-'''
