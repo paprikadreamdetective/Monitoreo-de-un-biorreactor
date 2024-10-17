@@ -22,7 +22,7 @@ class SensorDataInserterSQLite:
     def insertar_datos(self, fecha_valor, mq135_valor, mq4_valor):
         try:
             # Crear la consulta SQL para insertar los datos
-            sql = "INSERT INTO lecturas_sensores (fecha, sensor_mq135, sensor_mq4) VALUES (?, ?, ?)"
+            sql = "INSERT INTO lecturas_sensores (fecha, sensor_mq135, sensor_mq3) VALUES (?, ?, ?)"
             values = (fecha_valor, mq135_valor, mq4_valor)
             
             # Ejecutar la consulta
@@ -30,7 +30,7 @@ class SensorDataInserterSQLite:
             
             # Confirmar cambios en la base de datos
             self.connection.commit()
-            print(f"{fecha_valor} - Datos insertados: MQ-135 = {mq135_valor}, MQ-4 = {mq4_valor}")
+            print(f"{fecha_valor} - Datos insertados: MQ-135 = {mq135_valor}, MQ-3 = {mq4_valor}")
         
         except sqlite3.Error as e:
             print(f"Error al insertar los datos: {e}")
