@@ -14,8 +14,8 @@ import threading
 def main(page: ft.Page):
     # Tamaño de la ventana
     page.title = "Gráfica de Sensores en Tiempo Real"
-    page.window_width = 1000
-    page.window_height = 600
+    page.window_width = 1300
+    page.window_height = 700
     # Crear instancias de las clases
     serial_connection = SerialConnection()
     inserter = SensorDataInserterSQLite(db_file="db/sensores.db")
