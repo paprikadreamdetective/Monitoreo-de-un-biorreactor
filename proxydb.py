@@ -14,7 +14,7 @@ class SensorDataInserterSQLite:
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 sensor_mq135 INTEGER NOT NULL,
-                sensor_mq4 INTEGER NOT NULL
+                sensor_mq3 INTEGER NOT NULL
             )
         ''')
         self.connection.commit()
