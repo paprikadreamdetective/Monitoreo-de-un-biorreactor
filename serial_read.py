@@ -110,16 +110,62 @@ def main(page: ft.Page):
         page.dialog = dialogo
         dialogo.open = True
         page.update()
-    
-    # Botón para mostrar la ventana con los datos
-    page.add(ft.ElevatedButton("Mostrar Datos de Sensores", on_click=mostrar_datos))
 
-    # Botón para iniciar la lectura serial
-    page.add(ft.ElevatedButton("Iniciar Lectura Serial", on_click=start_reading_serial))
-    page.add(ft.ElevatedButton("Terminar Lectura Serial", on_click=stop_reading_serial))
-    # Botón para generar el archivo Excel
-    page.add(ft.ElevatedButton("Generar Excel", on_click=lambda e: excel_generator.generar_excel(e, page)))
-    
+    # Crear botones con íconos y centrarlos
+    botones = ft.Row(
+        [
+            ft.ElevatedButton(
+                content=ft.Row(
+                    [
+                        ft.Icon(name=ft.icons.SENSOR_WINDOW, color="blue"),
+                        ft.Text("Mostrar Datos de Sensores"),
+                    ],
+                    alignment=ft.MainAxisAlignment.CENTER,
+                    spacing=5,
+                ),
+                on_click=mostrar_datos,
+            ),
+            ft.ElevatedButton(
+                content=ft.Row(
+                    [
+                        ft.Icon(name=ft.icons.START, color="green"),
+                        ft.Text("Iniciar Lectura Serial"),
+                    ],
+                    alignment=ft.MainAxisAlignment.CENTER,
+                    spacing=5,
+                ),
+                on_click=start_reading_serial,
+            ),
+            ft.ElevatedButton(
+                content=ft.Row(
+                    [
+                        ft.Icon(name=ft.icons.STOP, color="red"),
+                        ft.Text("Terminar Lectura Serial"),
+                    ],
+                    alignment=ft.MainAxisAlignment.CENTER,
+                    spacing=5,
+                ),
+                on_click=stop_reading_serial,
+            ),
+            ft.ElevatedButton(
+                content=ft.Row(
+                    [
+                        ft.Icon(name=ft.icons.FILE_DOWNLOAD, color="purple"),
+                        ft.Text("Generar Excel"),
+                    ],
+                    alignment=ft.MainAxisAlignment.CENTER,
+                    spacing=5,
+                ),
+                on_click=lambda e: excel_generator.generar_excel(e, page),
+            ),
+        ],
+        alignment=ft.MainAxisAlignment.CENTER,  # Centrar todos los botones
+        spacing=10,
+    )
+
+    # Añadir los botones centrados a la página
+    page.add(botones)
+
     # Al cerrar la página, desconectar el puerto serial
     page.on_close = lambda _: serial_connection.disconnect(ser)
 
