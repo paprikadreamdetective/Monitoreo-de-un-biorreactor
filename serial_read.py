@@ -11,29 +11,8 @@ import os
 # Importar la clase para insertar datos en SQLite
 from proxydb import SensorDataInserterSQLite
 from SerialConnection import SerialConnection
+from ExcelGenerator import ExcelGenerator
 
-# --- Módulo de configuración del puerto serial ---
-'''
-class SerialConfig:
-    def __init__(self, port='COM6', baud_rate=9600, timeout=1):
-        self.port = port
-        self.baud_rate = baud_rate
-        self.timeout = timeout
-
-    def connect(self):
-        try:
-            ser = serial.Serial(self.port, self.baud_rate, timeout=self.timeout)
-            print(f"Conectado al puerto {self.port}")
-            return ser
-        except serial.SerialException as e:
-            print(f"Error de conexión: {e}")
-            return None
-
-    def disconnect(self, ser):
-        if ser and ser.is_open:
-            ser.close()
-            print(f"Conexión serial cerrada en {self.port}")
-'''
 # --- Módulo de manejo de gráficas ---
 class SensorGraph:
     def __init__(self):
@@ -86,6 +65,7 @@ class SensorDataReader:
         return False
 
 # --- Módulo de generación de Excel ---
+'''
 class ExcelGenerator:
     def __init__(self, db_file="sensores.db"):
         self.db_file = db_file
@@ -103,7 +83,7 @@ class ExcelGenerator:
         page.snack_bar = ft.SnackBar(ft.Text(f"Archivo {nombre_excel} generado con éxito!"), open=True)
         page.update()
         conn.close()
-
+'''
 # --- Módulo principal de la interfaz gráfica ---
 def main(page: ft.Page):
     # Tamaño de la ventana
@@ -112,7 +92,7 @@ def main(page: ft.Page):
     page.window_height = 600
     # Crear instancias de las clases
     serial_connection = SerialConnection()
-    inserter = SensorDataInserterSQLite(db_file="sensores.db")
+    inserter = SensorDataInserterSQLite(db_file="db/sensores.db")
     sensor_graph = SensorGraph()
     excel_generator = ExcelGenerator()
 
