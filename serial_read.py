@@ -12,7 +12,8 @@ import os
 from proxydb import SensorDataInserterSQLite
 from SerialConnection import SerialConnection
 from ExcelGenerator import ExcelGenerator
-
+from Chart import Chart
+'''
 # --- Módulo de manejo de gráficas ---
 class SensorGraph:
     def __init__(self):
@@ -37,7 +38,7 @@ class SensorGraph:
     def add_data(self, mq135_value, mq3_value):
         self.mq135_buffer.append(mq135_value)
         self.mq3_buffer.append(mq3_value)
-
+'''
 # --- Módulo de lectura de datos seriales ---
 class SensorDataReader:
     def __init__(self, serial_connection, graph, inserter):
@@ -64,26 +65,7 @@ class SensorDataReader:
             return False
         return False
 
-# --- Módulo de generación de Excel ---
-'''
-class ExcelGenerator:
-    def __init__(self, db_file="sensores.db"):
-        self.db_file = db_file
 
-    def generar_excel(self, e, page):
-        conn = sqlite3.connect(self.db_file)
-        query = "SELECT * FROM lecturas_sensores"  # Cambia esto al nombre de tu tabla
-        df = pd.read_sql_query(query, conn)
-        nombre_excel = "lecturas_sensores.xlsx"
-
-        if os.path.exists(nombre_excel):
-            os.remove(nombre_excel)
-
-        df.to_excel(nombre_excel, index=False)
-        page.snack_bar = ft.SnackBar(ft.Text(f"Archivo {nombre_excel} generado con éxito!"), open=True)
-        page.update()
-        conn.close()
-'''
 # --- Módulo principal de la interfaz gráfica ---
 def main(page: ft.Page):
     # Tamaño de la ventana
@@ -93,7 +75,7 @@ def main(page: ft.Page):
     # Crear instancias de las clases
     serial_connection = SerialConnection()
     inserter = SensorDataInserterSQLite(db_file="db/sensores.db")
-    sensor_graph = SensorGraph()
+    sensor_graph = Chart()
     excel_generator = ExcelGenerator()
 
     # Conectar el puerto serial
