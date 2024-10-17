@@ -129,6 +129,24 @@ def main(page: ft.Page):
         dialogo.open = True
         page.update()
 
+   
+    exit_button = ft.ElevatedButton(
+        content=ft.Row(
+            [
+                ft.Icon(name=ft.icons.EXIT_TO_APP, color="white"),
+                ft.Text("Salir", color="white"),
+            ],
+            alignment=ft.MainAxisAlignment.CENTER,
+            spacing=5,
+        ),
+        width=150,  # Hacer el botón más ancho
+        bgcolor="red",
+        on_click=lambda e: page.window_close(),  # Acción para cerrar la aplicación
+    )
+
+    # Añadir el botón de salida con alineación inferior izquierda
+    
+
     # Crear botones con íconos y centrarlos
     botones = ft.Row(
         [
@@ -184,8 +202,19 @@ def main(page: ft.Page):
     # Añadir los botones centrados a la página
     page.add(botones)
 
+     # Añadir el botón de salida sin bloquear los demás elementos
+    page.add(
+        ft.Container(
+            content=exit_button,
+            alignment=ft.alignment.bottom_left,
+            padding=ft.padding.only(left=5, bottom=1),
+        )
+    )
+     # Crear un botón de salida más ancho en la esquina inferior izquierda
+    
+
     # Al cerrar la página, desconectar el puerto serial
-    page.on_close = lambda _: serial_connection.disconnect(ser)
+    page.on_close = lambda _: serial_connection.disconnect()
 
 # Ejecutar la aplicación Flet
 ft.app(target=main)
