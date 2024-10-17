@@ -9,7 +9,7 @@ import time
 import flet as ft
 from flet.matplotlib_chart import MatplotlibChart
 import sqlite3
-
+import threading
 # --- Módulo principal de la interfaz gráfica ---
 def main(page: ft.Page):
     # Tamaño de la ventana
@@ -21,27 +21,45 @@ def main(page: ft.Page):
     inserter = SensorDataInserterSQLite(db_file="db/sensores.db")
     sensor_graph = Chart()
     excel_generator = ExcelGenerator()
-
+    
     # Conectar el puerto serial
-    ser = serial_connection.begin()
-
+    #ser = serial_connection.begin()
+    data_reader = SensorDataReader(serial_connection, sensor_graph, inserter)
     # Crear gráfica y agregarla a la página
     chart = MatplotlibChart(sensor_graph.fig, expand=True)
     page.add(chart)
 
+   
     # Función de actualización del gráfico
     def update_chart():
         sensor_graph.update(chart)
-
-    # Función de lectura de datos seriales
+    
+    # Función de inicio de lectura serial
     def start_reading_serial(e):
-        data_reader = SensorDataReader(ser, sensor_graph, inserter)
-        while data_reader.read_serial_data():
+        if serial_connection.is_connected():
+            print("La conexión serial ya está activa.")
+            return
+
+        if serial_connection.begin():
+            data_reader.start_reading()
+            threading.Thread(target=read_data_loop, daemon=True).start()
+            global start_time
+            start_time = time.time()  # Iniciar cronómetro
+        else:
+            print("Error al iniciar la conexión serial.")
+
+    # Bucle de lectura de datos en un hilo separado
+    def read_data_loop():
+        while data_reader.reading_active:
+            data_reader.read_serial_data()
             update_chart()
-    
-    def stop_reading_serial(e):
-        serial_connection.disconnect(ser)
-    
+
+    # Función para detener la lectura serial
+    def stop_reading_serial(e=None):
+        data_reader.stop_reading()
+        serial_connection.disconnect()
+        print("Lectura serial detenida.")
+
     # Función para mostrar la ventana con los datos de la base de datos en formato de tabla
     def mostrar_datos(e):
         # Conectar a la base de datos SQLite

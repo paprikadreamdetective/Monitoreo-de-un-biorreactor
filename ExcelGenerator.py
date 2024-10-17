@@ -52,38 +52,3 @@ class ExcelGenerator:
         dialogo.open = True
         page.update()
 
-
-    '''
-    def generar_excel(self, e, page):
-        conn = sqlite3.connect(self.db_file)
-        query = "SELECT * FROM lecturas_sensores"  # Cambia esto al nombre de tu tabla
-        df = pd.read_sql_query(query, conn)
-        nombre_excel = "lecturas_sensores.xlsx"
-
-        if os.path.exists(nombre_excel):
-            os.remove(nombre_excel)
-
-        df.to_excel(nombre_excel, index=False)
-        
-        def cerrar_diaglogo():
-            dialogo.open = False
-
-
-        # Crear un contenedor con tamaño fijo y scrollbar
-        container = ft.Container(
-            width=600,
-            height=400,
-            content=ft.Text(""),
-        )
-
-        dialogo = ft.AlertDialog(
-            title=ft.Text("Datos de Sensores"),
-            content=container,
-            actions=[ft.TextButton("Cerrar", on_click=lambda e: cerrar_dialogo())],
-            actions_alignment=ft.MainAxisAlignment.END,
-        )
-        
-        #page.snack_bar = ft.SnackBar(ft.Text(f"Archivo {nombre_excel} generado con éxito!"), open=True)
-        #page.update()
-        conn.close()
-        '''
