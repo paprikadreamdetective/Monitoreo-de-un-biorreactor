@@ -117,7 +117,7 @@ def main(page: ft.Page):
     excel_generator = ExcelGenerator()
 
     # Conectar el puerto serial
-    ser = serial_connection.connect()
+    ser = serial_connection.begin()
 
     # Crear gráfica y agregarla a la página
     chart = MatplotlibChart(sensor_graph.fig, expand=True)
