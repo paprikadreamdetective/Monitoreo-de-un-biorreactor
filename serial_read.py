@@ -48,11 +48,15 @@ def main(page: ft.Page):
             while True:
                 if ser.in_waiting > 0:  # Verificar si hay datos disponibles
                     data = ser.readline().decode('utf-8').strip()  # Leer y decodificar los datos
-                    if data.isdigit():  # Verificar que los datos sean números
+                    print(f"Datos recibidos: {data}")
+                    # Separar los valores usando la coma como delimitador
+                    valores = data.split(',')
+                    #if data.isdigit():  # Verificar que los datos sean números
+                    if len(valores) == 2:
                         data_buffer.append(int(data))  # Agregar los datos al buffer
                         print(f"Datos recibidos: {data}")  # Imprimir datos recibidos
-                        mq135_valor = 300  # Ejemplo de valor del sensor MQ-135
-                        mq4_valor = 200    # Ejemplo de valor del sensor MQ-4
+                        mq135_valor = valores[0]  # Ejemplo de valor del sensor MQ-135
+                        mq4_valor = valores[1]    # Ejemplo de valor del sensor MQ-4
                         fecha_valor = time.ctime()
                         inserter.insertar_datos(fecha_valor, mq135_valor, mq4_valor)
                         update_chart()  # Actualizar la gráfica en tiempo real

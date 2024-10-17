@@ -1,7 +1,7 @@
-#include<unordered_map>
+#include <UnorderedMap.h>
 
 int i = 0;
-int j = 0;
+int j = 10;
 
 
 void setup() {
@@ -10,10 +10,14 @@ void setup() {
 
 void loop() {
 
-  if ( counter >= 20 )
-    counter = 0;
-  Serial.println(counter);
-  Serial.println();
-  counter++;
+  if ( i >= 20 && j >= 30) {
+    i = 0;
+    j = 10;
+  }
+  Serial.print(i);
+  Serial.print(",");
+  Serial.println(j);
+  i++;
+  j++;
   delay(250);
 }
