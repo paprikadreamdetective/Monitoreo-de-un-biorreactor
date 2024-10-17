@@ -10,6 +10,7 @@ import os
 
 # Importar la clase para insertar datos en SQLite
 from proxydb import SensorDataInserterSQLite
+from SerialConnection import SerialConnection
 
 # --- Módulo de configuración del puerto serial ---
 '''
@@ -105,19 +106,18 @@ class ExcelGenerator:
 
 # --- Módulo principal de la interfaz gráfica ---
 def main(page: ft.Page):
-    # Configuración de la página
+    # Tamaño de la ventana
     page.title = "Gráfica de Sensores en Tiempo Real"
     page.window_width = 1000
     page.window_height = 600
-
-    # Crear instancias de los módulos
-    serial_config = SerialConfig()
+    # Crear instancias de las clases
+    serial_connection = SerialConnection()
     inserter = SensorDataInserterSQLite(db_file="sensores.db")
     sensor_graph = SensorGraph()
     excel_generator = ExcelGenerator()
 
     # Conectar el puerto serial
-    ser = serial_config.connect()
+    ser = serial_connection.connect()
 
     # Crear gráfica y agregarla a la página
     chart = MatplotlibChart(sensor_graph.fig, expand=True)
@@ -134,7 +134,7 @@ def main(page: ft.Page):
             update_chart()
     
     def stop_reading_serial(e):
-        serial_config.disconnect(ser)
+        serial_connection.disconnect(ser)
 
     # Botón para iniciar la lectura serial
     page.add(ft.ElevatedButton("Iniciar Lectura Serial", on_click=start_reading_serial))
@@ -143,7 +143,7 @@ def main(page: ft.Page):
     page.add(ft.ElevatedButton("Generar Excel", on_click=lambda e: excel_generator.generar_excel(e, page)))
     
     # Al cerrar la página, desconectar el puerto serial
-    page.on_close = lambda _: serial_config.disconnect(ser)
+    page.on_close = lambda _: serial_connection.disconnect(ser)
 
 # Ejecutar la aplicación Flet
 ft.app(target=main)
